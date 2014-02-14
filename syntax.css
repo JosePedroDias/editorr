@@ -1,0 +1,8 @@
+.phrase,
+.punct {
+	background-color: #FBB;
+}
+
+.word {
+	background-color: #BFB;
+}
