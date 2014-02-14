@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>editorr - parser test</title>
+
+        <script type="text/javascript" src="js-tokenizer.js"></script>
+        <script type="text/javascript" src="ajax.js"></script>
+    </head>
+
+    <body>
+        <div id="ctn"></div>
+
+        <script type="text/javascript">
+            var tknzr = jsTokenizer(
+                // rules regexes
+                {
+                    whitespace: /\s+/,
+                    word:       /[a-zA-ZáéíóúàãẽõçÁÉÍÓÚÀÃẼÕÇ]+/,
+                    punct:      /[;.:\?\^%<>=!&|+\-,]+/
+                },
+                // rules order
+                'whitespace word punct'.split(' '),
+                // object mode?
+                1
+            );
+
+            var text = ajaxSync('texto1.txt');
+
+            var tokens = tknzr.tokenize(text, true);
+            console.log(tokens);
+
+            console.log( tknzr.tokenType(tokens[0]) );
+            console.log( tknzr.tokenType(tokens[1]) );
+        </script>
+    </body>
+</html>

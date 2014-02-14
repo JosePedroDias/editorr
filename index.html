@@ -8,6 +8,7 @@
         <link rel="stylesheet" type="text/css" href="editorr.css">
         <link rel="stylesheet" type="text/css" href="syntax.css">
 
+        <script type="text/javascript" src="js-tokenizer.js"></script>
         <script type="text/javascript" src="editorr.js"></script>
         <script type="text/javascript" src="ajax.js"></script>
     </head>
@@ -16,7 +17,7 @@
         <div id="ctn"></div>
 
         <script type="text/javascript">
-            editor(
+            editorr(
                 ctn,
                 ajaxSync('texto1.txt')
             );
