@@ -7,10 +7,13 @@
     var tknzr = window.jsTokenizer(
         { // rules regexes
             ws:    /\s+/,
-            word:  /[a-zA-ZáéíóúàãẽõçÁÉÍÓÚÀÃẼÕÇ]+/,
-            punct: /[;.:\?\^%<>=!&|+\-,]+/
+            punct: /[;.:\?\^%<>=!&|+\-,\(\)]+/,
+            email: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/,
+            //url:   /((([a-zA-Z]{2,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[a-zA-Z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+            word:  /[a-zA-ZáéíóúàãẽõâêôçÁÉÍÓÚÀÃẼÕÂÊÔÇ]+/,
+            any:   /.+/
         },
-        'ws word punct'.split(' '), // rules order
+        'ws punct email word any'.split(' '), // rules order
         1 // object mode?
     );
 

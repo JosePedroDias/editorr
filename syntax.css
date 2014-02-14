@@ -1,11 +1,6 @@
-.punct {
-    background-color: #FBB;
-}
-
-.word {
-    background-color: #BFB;
-}
-
-.ws {
-    background-color: #BBF;
-}
+.punct { background-color: #FBB; }
+.word  { background-color: #BFB; }
+.ws    { background-color: #BBF; }
+.email { background-color: #0F0; }
+.url   { background-color: #00F; }
+.any   { background-color: #F00; }
