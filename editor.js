@@ -7,7 +7,8 @@
  * i-index in string
  */
 
-var punctRgx = /[\.\?!,\-]+/m;
+var punctRgx = /[\.\?!,;\(\)\-]+/m;
+var whiteRgx = /[ \t\n]+/m;
 
 var parser = function(content) {
 	var tokens = [
@@ -19,41 +20,55 @@ var parser = function(content) {
 	];
 
 	var split = function(i, parts) {
+		var n = parts.length;
 		parts.unshift(1);
 		parts.unshift(i);
 		tokens.splice.apply(tokens, parts);
+		return n - 1;
 	};
 
-	while (true) {
-		punctRgx.lastIndex = 0;
+	var findAll = function(rgx, t, i, matchT, unmatchedT) {
+		var m, v, ps = [];
+		while (true) {
+			m = rgx.exec(t.v);
+			if (!m) { break; }
+			if (m.index !== 0) {
+				v = t.v.substring(0, m.index);
+				ps.push({v:v, t:unmatchedT, i:t.i});
+			}
+			ps.push({v:m[0], t:matchT, i:m.index});
+			t.v = t.v.substring(m.index + m[0].length);
+		}
+		if (t.v.length > 0) {
+			ps.push({v:t.v, t:unmatchedT, i:t.i});
+		}
+		split(i, ps);
+	};
 
-		for (var i = 0, f = tokens.length, t, m, ps, v; i < f; ++i) {
+	//var keepGoing = true;
+	while (true /*keepGoing*/) {
+		//keepGoing = false;
+		for (var i = 0, f = tokens.length, t; i < f; ++i) {
 			t = tokens[i];
-			ps = [];
 
 			switch (t.t) {
 				case '':
-					//punctRgx.lastIndex = 0;
-					while (true) {
-						m = punctRgx.exec(t.v);
-						//console.log(m);
-						if (!m) { break; }
-						if (m.index !== 0) {
-							v = t.v.substring(0, m.index);
-							ps.push({v:v, t:'word', i:t.i});
-							//t.v = t.v.substr(m.index, m[0].length);
-						}
-						ps.push({v:m[0], t:'punct', i:m.index});
-						t.v = t.v.substring(m.index + m[0].length);
-					}
-					if (t.v.length > 0) {
-						ps.push({v:t.v, t:'word', i:t.i});
-					}
-					split(i, ps);
+					f += findAll(punctRgx, t, i, 'punct', 'nopunct');
 					--i;
+					//keepGoing = true;
 					break;
 
+				case 'nopunct':
+					f += findAll(whiteRgx, t, i, ' ', 'word');
+					--i;
+					//keepGoing = true;
+					break;
+
+				//case 'word': case ' ': case 'punct':
+				//	break;
+
 				default:
+					console.log(i, f, t.t, t.v);
 					return tokens;
 			}
 		}
